@@ -1,0 +1,8 @@
+docker build -t enigma sample_proj/
+
+#The AP_LOG_DIR should already be present as we have not handled it in Dockerfile.
+APP_LOG_DIR=/mnt/users/bbharati/enigma1/logs/
+#My uid:gid on the VM is 2033:500. The mounted external path referred by APP_LOG_DIR is owned by 2033:500.
+docker run --name enigma1 --user 2033:500 --pid=host --cpus="0.5" -td -v $APP_LOG_DIR:/app/logs/ -e APP_NAME=bharati.binita.sample.proj.CPUIntensiveTask enigma 
+
+docker run --name enigma1 --user 2033:500 --pid=host --memory=64m -td -v $APP_LOG_DIR:/app/logs/ -e APP_NAME=bharati.binita.sample.proj.MemoryIntensiveTask -e APP_ARG=10 -e "HEAP_OPTS=-Xms4G -Xmx4G" enigma
